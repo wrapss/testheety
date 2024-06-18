@@ -16,15 +16,8 @@ jobs:
     - name: Increment version
       run: ./increment_version.sh
 
-    - name: Configure Git credentials
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git config --global credential.helper cache
-        echo "${{ secrets.ACTIONS_TOKEN }}" | git credential-cache store
+    - name: Commit & Push changes
+      uses: actions-js/push@master
+      with:
+        github_token: ${{ secrets.ACTIONS_TOKEN }}
 
-    - name: Commit incremented version
-      run: |
-        git add pubspec.yaml
-        git commit -m "Increment version to ${{ steps.increment_version.outputs.new_version }}"
-        git push
