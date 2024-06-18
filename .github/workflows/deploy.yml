@@ -14,24 +14,17 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Increment version
-      id: increment_version
       run: ./increment_version.sh
 
-    - name: Display new version
-      run: |
-        new_version=$(grep 'version:' pubspec.yaml | awk '{print $2}')
-        echo "New version is $new_version"
-
-    - name: Configure Git
+    - name: Configure Git credentials
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git config --global credential.helper cache
+        echo "${{ secrets.ACTIONS_TOKEN }}" | git credential-cache store
 
     - name: Commit incremented version
-      env:
-        ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
       run: |
         git add pubspec.yaml
-        git commit -m "Increment version to $new_version"
-        git remote set-url origin https://github-actions:${ACTIONS_TOKEN}@github.com/wrapss/testheety.git
+        git commit -m "Increment version to ${{ steps.increment_version.outputs.new_version }}"
         git push
