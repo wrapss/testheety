@@ -1,4 +1,4 @@
-name: Increment version
+name: Deploy Flutter App
 
 on:
   push:
@@ -13,23 +13,25 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Increment version
+      id: increment_version
+      run: ./increment_version.sh
+
+    - name: Display new version
+      run: |
+        new_version=$(grep 'version:' pubspec.yaml | awk '{print $2}')
+        echo "New version is $new_version"
+
     - name: Configure Git
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-      
-    - name: Increment version
-      run: |
-        # Vos commandes pour incrémenter la version et effectuer des modifications
-        echo "Increment version"
-        # Simuler des modifications
-        echo "Version increment" >> version.txt
-        git add version.txt
-        git commit -m "Increment version to"
 
-    - name: Push changes
+    - name: Commit incremented version
       env:
         ACTIONS_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
       run: |
-        git remote set-url origin https://github-actions:${ACTIONS_TOKEN}@github.com/wrapss/testheety.git
-        git push origin main
+        git add pubspec.yaml
+        git commit -m "Increment version to $new_version"
+        git remote set-url origin https://github-actions:${ACTIONS_TOKEN}@github.com/<username>/<repository>.git
+        git push
