@@ -33,5 +33,5 @@ jobs:
       run: |
         git add pubspec.yaml
         git commit -m "Increment version to $new_version"
-        git remote set-url origin https://github-actions:${ACTIONS_TOKEN}@github.com/<username>/<repository>.git
+        git remote set-url origin https://github-actions:${ACTIONS_TOKEN}@github.com/wrapss/testheety.git
         git push
