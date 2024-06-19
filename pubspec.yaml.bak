@@ -1,7 +1,7 @@
 kname: application_heety_client
 description: Heety Client Application
 
-version: v1.1.0+23
+version: 1.0.5+22
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
