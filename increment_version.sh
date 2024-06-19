@@ -2,8 +2,9 @@
 
 latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
 
-version_name=$(echo $latest_tag | cut -d "-" -f 1)
+version_name=$(echo $latest_tag | sed 's/^v//')
 
+version_name=$(echo $version_name | cut -d "-" -f 1)
 current_version=$(grep 'version:' pubspec.yaml | sed 's/version: //')
 current_build_number=$(echo $current_version | cut -d "+" -f 2)
 
